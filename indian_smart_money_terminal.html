@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALAL ALPHA — NSE & BSE Smart Money & Whale Intelligence Terminal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Inter & JetBrains Mono Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dalal: {
+                            bg: '#050811',
+                            card: '#0c1222',
+                            border: '#1e293b',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            saffron: '#f97316',
+                            rose: '#f43f5e',
+                            gold: '#eab308'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050811;
+            color: #f1f5f9;
+        }
+        .glass-panel {
+            background: rgba(12, 18, 34, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-hover:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.12);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050811;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col pb-12">
+
+    <!-- Header Bar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3.5 mb-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Brand & Status -->
+            <div class="flex items-center space-x-4 w-full md:w-auto justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-saffron-500 via-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-indian-rupee-sign text-slate-950 font-black text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-bold text-lg tracking-tight text-white">DALAL ALPHA <span class="text-xs font-mono px-2 py-0.5 rounded bg-saffron-500/10 border border-saffron-500/30 text-saffron-400 font-semibold">NSE / BSE WHALES</span></h1>
+                        </div>
+                        <p class="text-xs text-slate-400 font-mono">SEBI Disclosures & HNI/FII/DII Intelligence</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 md:hidden">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        LIVE SEBI FEED
+                    </span>
+                </div>
+            </div>
+
+            <!-- Global Search & Market Status -->
+            <div class="flex items-center space-x-3 w-full md:w-auto">
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="Search Super-Investor or Stock (e.g. Kacholia, EMS)..." class="w-full bg-slate-900/90 border border-slate-700/60 rounded-lg pl-9 pr-4 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors font-mono">
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-2">
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-900 text-slate-300 border border-slate-800">
+                        <span class="w-2 h-2 mr-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        NIFTY 50: <strong class="text-white ml-1">24,380</strong> <span class="text-emerald-400 ml-1">(+0.42%)</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 w-full flex-1 space-y-6">
+
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Super-Investor Capital Tracked -->
+            <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition-all">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl group-hover:bg-cyan-500/10 transition-all"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Tracked Whale Capital</span>
+                    <i class="fa-solid fa-chart-pie text-cyan-400 text-sm"></i>
+                </div>
+                <div class="text-2xl font-bold font-mono text-white tracking-tight">₹48,520 Cr</div>
+                <div class="mt-2 flex items-center text-xs text-slate-400 font-mono">
+                    <span class="text-emerald-400 font-semibold flex items-center mr-1">
+                        <i class="fa-solid fa-arrow-trend-up mr-1"></i>+₹3,840 Cr
+                    </span>
+                    <span>Q2 Disclosures</span>
+                </div>
+            </div>
+
+            <!-- FII vs DII Net Capital Flow -->
+            <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition-all">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/10 transition-all"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-400">90D Institutional Net Flow</span>
+                    <i class="fa-solid fa-building-columns text-emerald-400 text-sm"></i>
+                </div>
+                <div class="text-xl font-bold font-mono flex items-center space-x-2">
+                    <span class="text-emerald-400">DII +₹14,230 Cr</span>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span>FII Net Flow:</span>
+                    <span class="text-rose-400 font-bold">-₹8,120 Cr</span>
+                </div>
+            </div>
+
+            <!-- Top Alpha Super-Investor -->
+            <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition-all">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition-all"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Highest Alpha Super-Investor</span>
+                    <i class="fa-solid fa-crown text-amber-400 text-sm"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="text-lg font-bold font-mono text-white tracking-tight">Ashish Kacholia</div>
+                    <span class="px-2 py-0.5 text-xs font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">+41.2% 1Y</span>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span>SmallCap Alpha Hunter</span>
+                    <button onclick="openWalletModal('Ashish Kacholia')" class="text-cyan-400 hover:text-cyan-300 underline text-xs">View Portfolio</button>
+                </div>
+            </div>
+
+            <!-- Top Overweight Sector Consensus -->
+            <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition-all">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl group-hover:bg-cyan-500/10 transition-all"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Top Overweight Sector</span>
+                    <i class="fa-solid fa-microchip text-cyan-400 text-sm"></i>
+                </div>
+                <div class="text-base font-bold text-slate-100 truncate" title="EMS & Defense Manufacturing">
+                    Defense & Electronics (EMS)
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs font-mono">
+                    <span class="text-emerald-400 font-bold">88% ACCUMULATING</span>
+                    <span class="text-slate-400">₹9,420 Cr Whales</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consensus Heatmap & Sector Accumulation Meter -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Heatmap / Smart Money Sector Consensus -->
+            <div class="lg:col-span-2 glass-panel p-5 rounded-2xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-fire text-saffron-400"></i>
+                                <span>NSE / BSE Sector Accumulation Heatmap</span>
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Aggregated FII, DII, and HNI Super-Investor Consensus based on SEBI disclosures</p>
+                        </div>
+                        <span class="text-xs font-mono bg-slate-900 px-3 py-1 rounded-lg border border-slate-800 text-slate-400">Q2 FY25 Disclosures</span>
+                    </div>
+
+                    <!-- Sector Cards List -->
+                    <div id="consensusList" class="space-y-3">
+                        <!-- Dynamic Consensus Rows JS populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Institutional Flow & SEBI Guard Widget -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col justify-between bg-gradient-to-b from-slate-900/90 to-slate-950/80">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                        <h2 class="text-base font-bold text-white">Institutional Allocation Guard</h2>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">
+                        Track institutional momentum based on SEBI >1% quarterly shareholding updates and exchange bulk/block deals.
+                    </p>
+
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex justify-between text-slate-300">
+                                <span>Domestic MFs (DII) Share</span>
+                                <span class="text-emerald-400 font-bold">48.2%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-400 h-full" style="width: 48.2%"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex justify-between text-slate-300">
+                                <span>Celebrity HNI Super-Investors</span>
+                                <span class="text-saffron-400 font-bold">31.5%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-saffron-400 h-full" style="width: 31.5%"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex justify-between text-slate-300">
+                                <span>Foreign Institutional Investors (FPI)</span>
+                                <span class="text-cyan-400 font-bold">20.3%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-cyan-400 h-full" style="width: 20.3%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-mono">SEBI Disclosure Cycle</span>
+                    <span class="px-2.5 py-1 text-xs font-mono font-semibold rounded-md bg-emerald-950 border border-emerald-500/40 text-emerald-400 flex items-center">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span>
+                        Q2 FILINGS UPDATED
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Super-Investor Leaderboard & Filters -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800">
+            <!-- Filter Bar Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-ranking-star text-cyan-400"></i>
+                        <span>Indian Super-Investors & Whales Leaderboard</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Track portfolio net worth, win rates, and major stock holdings based on SEBI >1% disclosure filings.</p>
+                </div>
+
+                <!-- Interactive Filters -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Investor Type Filter -->
+                    <select id="categoryFilter" onchange="filterWallets()" class="bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500">
+                        <option value="ALL">All Investor Types</option>
+                        <option value="HNI Whale">HNI Super-Investors</option>
+                        <option value="Domestic MF">Domestic Mutual Funds (DII)</option>
+                        <option value="Foreign FPI">Foreign Institutional (FII/FPI)</option>
+                    </select>
+
+                    <!-- Archetype Filter -->
+                    <select id="archetypeFilter" onchange="filterWallets()" class="bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500">
+                        <option value="ALL">All Archetypes</option>
+                        <option value="MidCap Alpha Hunter">MidCap Alpha Hunter</option>
+                        <option value="Mega Value Compounder">Mega Value Compounder</option>
+                        <option value="Institutional Momentum">Institutional Momentum</option>
+                        <option value="SmallCap Turnaround Specialist">SmallCap Turnaround Specialist</option>
+                    </select>
+
+                    <!-- Sort By -->
+                    <select id="sortBy" onchange="filterWallets()" class="bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500">
+                        <option value="value">Sort by Portfolio Value (₹ Cr)</option>
+                        <option value="returns">Sort by 1Y Returns (%)</option>
+                        <option value="winrate">Sort by Win Rate (%)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Leaderboard Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400 text-xs font-mono uppercase tracking-wider">
+                            <th class="py-3 px-4">Rank</th>
+                            <th class="py-3 px-4">Super-Investor / Institution</th>
+                            <th class="py-3 px-4">Type</th>
+                            <th class="py-3 px-4">Est. Portfolio Value</th>
+                            <th class="py-3 px-4">1Y Est. Return</th>
+                            <th class="py-3 px-4">Win Rate</th>
+                            <th class="py-3 px-4">Strategy Archetype</th>
+                            <th class="py-3 px-4">Key Holdings & Fresh Stakes</th>
+                            <th class="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="walletTableBody" class="divide-y divide-slate-800/60 font-mono text-xs">
+                        <!-- Dynamic Rows Inserted by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Copy Investing Allocation Calculator (INR INR) -->
+        <div class="glass-panel rounded-2xl p-6 border border-slate-800 relative overflow-hidden">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-0.5 rounded bg-saffron-500/10 text-saffron-400 border border-saffron-500/30 text-xs font-mono font-bold">NSE / BSE SIMULATOR</span>
+                        <h2 class="text-xl font-bold text-white">Super-Investor Copy-Allocation Calculator (₹ INR)</h2>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Simulate portfolio performance by shadowing top Indian super-investors with custom slippage, stop loss, and Nifty 50 benchmarking.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Inputs Form -->
+                <div class="space-y-4 bg-slate-900/90 p-5 rounded-xl border border-slate-800">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Select Target Super-Investor</label>
+                        <select id="calcWalletSelect" onchange="runCopySimulation()" class="w-full bg-slate-950 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-cyan-500 outline-none font-mono">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Your Capital Allocation (₹ INR)</label>
+                        <input type="number" id="capitalInput" value="500000" step="50000" min="25000" oninput="runCopySimulation()" class="w-full bg-slate-950 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-cyan-500 outline-none font-mono">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1">Max Stop Loss (%)</label>
+                            <input type="number" id="stopLossInput" value="12" min="5" max="30" oninput="runCopySimulation()" class="w-full bg-slate-950 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-cyan-500 outline-none font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1">Execution Impact (%)</label>
+                            <input type="number" id="slippageInput" value="1.0" step="0.2" min="0" max="5" oninput="runCopySimulation()" class="w-full bg-slate-950 border border-slate-700 text-xs text-white rounded-lg p-2.5 focus:border-cyan-500 outline-none font-mono">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Whale Copy Weight: <span id="copyPctLabel" class="text-cyan-400 font-bold">50%</span></label>
+                        <input type="range" id="copyPctRange" min="10" max="100" value="50" oninput="document.getElementById('copyPctLabel').innerText = this.value + '%'; runCopySimulation()" class="w-full accent-cyan-500 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Simulation Output Stats -->
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-mono text-slate-400 uppercase">Projected 1Y Net Corpus</span>
+                            <div id="calcProjReturn" class="text-2xl font-bold font-mono text-emerald-400 mt-2">₹6,85,200</div>
+                            <span id="calcProjRoi" class="text-xs font-mono text-emerald-400/80">(+37.0% Net Return)</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-4 font-mono">Adjusted for SEBI disclosure delay & execution lag.</p>
+                    </div>
+
+                    <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-mono text-slate-400 uppercase">Nifty 50 Benchmark Corpus</span>
+                            <div id="calcNiftyCorpus" class="text-2xl font-bold font-mono text-slate-300 mt-2">₹5,75,000</div>
+                            <span class="text-xs font-mono text-slate-400">(+15.0% Index Baseline)</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-4 font-mono">Alpha over Nifty: <span id="calcAlphaOverIndex" class="text-emerald-400 font-bold">+22.0%</span></p>
+                    </div>
+
+                    <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-mono text-slate-400 uppercase">Alpha Conviction Score</span>
+                            <div id="calcReliability" class="text-2xl font-bold font-mono text-cyan-400 mt-2">92 / 100</div>
+                            <span class="text-xs font-mono text-slate-400">High Institutional Quality</span>
+                        </div>
+                        <button onclick="triggerCopyAction()" class="w-full mt-4 bg-gradient-to-r from-saffron-500 via-emerald-500 to-cyan-500 hover:opacity-90 text-slate-950 font-bold text-xs py-2.5 rounded-lg transition-all shadow-md shadow-cyan-500/20 font-mono">
+                            ENABLE ALERT BASKET
+                        </button>
+                    </div>
+
+                    <!-- Simulator Chart -->
+                    <div class="sm:col-span-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800 h-52">
+                        <canvas id="simChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Deep-Dive Investor Detail Modal -->
+    <div id="walletModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-2xl max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-user-tie text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 id="modalWalletName" class="text-xl font-bold text-white font-mono">Ashish Kacholia</h3>
+                            <span id="modalArchetypeTag" class="px-2 py-0.5 text-xs font-mono bg-cyan-950 text-cyan-300 border border-cyan-500/30 rounded">MidCap Alpha Hunter</span>
+                        </div>
+                        <p id="modalCategory" class="text-xs text-slate-400 font-mono">SEBI Category: HNI Super-Investor</p>
+                    </div>
+                </div>
+                <button onclick="closeWalletModal()" class="text-slate-400 hover:text-white p-2 text-xl font-bold">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 space-y-6">
+                <!-- Modal Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-mono text-slate-400">Est. Portfolio Net Worth</span>
+                        <div id="modalPnL" class="text-lg font-bold font-mono text-emerald-400">₹3,150 Cr</div>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-mono text-slate-400">1Y Est. Return</span>
+                        <div id="modalVol" class="text-lg font-bold font-mono text-white">+41.2%</div>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-mono text-slate-400">Win Rate</span>
+                        <div id="modalWinRate" class="text-lg font-bold font-mono text-cyan-400">74.5%</div>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-xs font-mono text-slate-400">Primary Sector</span>
+                        <div id="modalSharpe" class="text-lg font-bold font-mono text-saffron-400">EMS & Auto Anc.</div>
+                    </div>
+                </div>
+
+                <!-- Chart Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Equity Curve vs Nifty 50 -->
+                    <div class="md:col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <h4 class="text-xs font-mono uppercase text-slate-400 mb-3">1-Year Portfolio NAV Growth vs Nifty 50</h4>
+                        <div class="h-56">
+                            <canvas id="modalEquityChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Category Doughnut -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <h4 class="text-xs font-mono uppercase text-slate-400 mb-3">Sector Allocation Breakdown</h4>
+                        <div class="h-56 flex items-center justify-center">
+                            <canvas id="modalCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEBI >1% Disclosures & Bulk Deals Table -->
+                <div>
+                    <h4 class="text-xs font-mono uppercase text-slate-400 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-file-contract text-cyan-400"></i>
+                        <span>Recent SEBI >1% Disclosures & Exchange Bulk Deals</span>
+                    </h4>
+                    <div class="overflow-x-auto bg-slate-950 rounded-xl border border-slate-800">
+                        <table class="w-full text-left font-mono text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400">
+                                    <th class="p-3">Company (NSE/BSE)</th>
+                                    <th class="p-3">Disclosure Type</th>
+                                    <th class="p-3">Stake (%)</th>
+                                    <th class="p-3">Avg Buying Price</th>
+                                    <th class="p-3">CMP (₹)</th>
+                                    <th class="p-3">Unrealized Gain</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalPositionsTable" class="divide-y divide-slate-800/60 text-slate-200">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 border border-cyan-500/50 text-cyan-300 font-mono text-xs px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMsg">Alerts configured successfully!</span>
+    </div>
+
+    <!-- JavaScript Dataset & Quant Engine -->
+    <script>
+        // Indian Market Super-Investor Master Dataset
+        const superInvestorData = [
+            {
+                rank: 1,
+                name: "Radhakishan Damani",
+                category: "HNI Whale",
+                type: "HNI Super-Investor",
+                value: 182400, // ₹ Cr
+                returns: 28.4,
+                winrate: 82.0,
+                archetype: "Mega Value Compounder",
+                keyHoldings: "Avenue Supermarts (DMart), VST Industries, India Cements",
+                equityCurve: [142000, 151000, 159000, 168000, 174000, 182400],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Retail: 85, Consumer: 10, Cement: 5 },
+                disclosures: [
+                    { company: "Avenue Supermarts (DMART)", type: "Promoter >1%", stake: "67.2%", avgPrice: "₹3,420", cmp: "₹3,980", gain: "+16.3%" },
+                    { company: "VST Industries", type: "Bulk Deal", stake: "3.2%", avgPrice: "₹3,150", cmp: "₹3,620", gain: "+14.9%" }
+                ]
+            },
+            {
+                rank: 2,
+                name: "Ashish Kacholia",
+                category: "HNI Whale",
+                type: "HNI Super-Investor",
+                value: 3150,
+                returns: 41.2,
+                winrate: 74.5,
+                archetype: "MidCap Alpha Hunter",
+                keyHoldings: "EMS Ltd, Concord Control, Knowledge Marine, Fineotex",
+                equityCurve: [2230, 2450, 2680, 2890, 3010, 3150],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { EMS: 40, Industrial: 30, Chemicals: 20, Tech: 10 },
+                disclosures: [
+                    { company: "EMS Ltd", type: "SEBI >1% Filing", stake: "2.1%", avgPrice: "₹480", cmp: "₹760", gain: "+58.3%" },
+                    { company: "Concord Control Systems", type: "Block Deal", stake: "1.8%", avgPrice: "₹820", cmp: "₹1,240", gain: "+51.2%" },
+                    { company: "Fineotex Chemical", type: "Q2 Filing", stake: "2.8%", avgPrice: "₹340", cmp: "₹410", gain: "+20.5%" }
+                ]
+            },
+            {
+                rank: 3,
+                name: "Vijay Kedia",
+                category: "HNI Whale",
+                type: "HNI Super-Investor",
+                value: 1680,
+                returns: 36.8,
+                winrate: 71.2,
+                archetype: "SmallCap Turnaround Specialist",
+                keyHoldings: "Tejas Networks, Atul Auto, Patel Engineering, Elecon",
+                equityCurve: [1220, 1340, 1450, 1560, 1610, 1680],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Telecom: 35, CapitalGoods: 35, Auto: 20, Infra: 10 },
+                disclosures: [
+                    { company: "Tejas Networks", type: "SEBI >1% Filing", stake: "1.9%", avgPrice: "₹710", cmp: "₹1,180", gain: "+66.1%" },
+                    { company: "Patel Engineering", type: "Bulk Deal", stake: "1.6%", avgPrice: "₹48", cmp: "₹64", gain: "+33.3%" }
+                ]
+            },
+            {
+                rank: 4,
+                name: "Quant Mutual Fund",
+                category: "Domestic MF",
+                type: "Domestic MF (DII)",
+                value: 92400,
+                returns: 34.5,
+                winrate: 78.0,
+                archetype: "Institutional Momentum",
+                keyHoldings: "Reliance, Jio Financial, Adani Power, Hindalco",
+                equityCurve: [68000, 74000, 81000, 86000, 89500, 92400],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Energy: 35, Metals: 25, BFSI: 25, IT: 15 },
+                disclosures: [
+                    { company: "Adani Power", type: "MF Scheme Disclosure", stake: "3.4%", avgPrice: "₹520", cmp: "₹670", gain: "+28.8%" },
+                    { company: "Jio Financial Services", type: "Portfolio Update", stake: "2.8%", avgPrice: "₹310", cmp: "₹355", gain: "+14.5%" }
+                ]
+            },
+            {
+                rank: 5,
+                name: "Mukul Agrawal",
+                category: "HNI Whale",
+                type: "HNI Super-Investor",
+                value: 4820,
+                returns: 39.1,
+                winrate: 73.0,
+                archetype: "MidCap Alpha Hunter",
+                keyHoldings: "Neuland Labs, Raymond, Ceat, Orient Green Power",
+                equityCurve: [3460, 3820, 4150, 4480, 4690, 4820],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Pharma: 40, AutoAnc: 25, Textiles: 20, Energy: 15 },
+                disclosures: [
+                    { company: "Neuland Laboratories", type: "SEBI >1% Filing", stake: "1.4%", avgPrice: "₹6,200", cmp: "₹11,400", gain: "+83.8%" },
+                    { company: "Raymond Ltd", type: "Bulk Deal", stake: "1.7%", avgPrice: "₹1,850", cmp: "₹2,320", gain: "+25.4%" }
+                ]
+            },
+            {
+                rank: 6,
+                name: "SBI Mutual Fund",
+                category: "Domestic MF",
+                type: "Domestic MF (DII)",
+                value: 710000,
+                returns: 22.1,
+                winrate: 81.5,
+                archetype: "Mega Value Compounder",
+                keyHoldings: "HDFC Bank, ICICI Bank, Infosys, L&T, ITC",
+                equityCurve: [580000, 610000, 645000, 675000, 690000, 710000],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Banking: 38, IT: 20, CapitalGoods: 18, FMCG: 14, Auto: 10 },
+                disclosures: [
+                    { company: "Larsen & Toubro", type: "MF Portfolio Disclosure", stake: "4.8%", avgPrice: "₹3,100", cmp: "₹3,620", gain: "+16.7%" },
+                    { company: "ICICI Bank", type: "Q2 Filing", stake: "6.2%", avgPrice: "₹1,020", cmp: "₹1,240", gain: "+21.5%" }
+                ]
+            },
+            {
+                rank: 7,
+                name: "Dolly Khanna",
+                category: "HNI Whale",
+                type: "HNI Super-Investor",
+                value: 620,
+                returns: 29.5,
+                winrate: 68.4,
+                archetype: "SmallCap Turnaround Specialist",
+                keyHoldings: "Prakash Pipes, Mangalore Chemicals, Talbros Auto",
+                equityCurve: [470, 510, 540, 575, 595, 620],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { Chemicals: 45, AutoAnc: 35, Agri: 20 },
+                disclosures: [
+                    { company: "Talbros Automotive Components", type: "SEBI >1% Filing", stake: "1.2%", avgPrice: "₹230", cmp: "₹310", gain: "+34.7%" }
+                ]
+            },
+            {
+                rank: 8,
+                name: "Nomura India Investment",
+                category: "Foreign FPI",
+                type: "Foreign Institutional (FII)",
+                value: 48500,
+                returns: 25.8,
+                winrate: 76.2,
+                archetype: "Institutional Momentum",
+                keyHoldings: "Zomato, Trent, Bharti Airtel, Premier Explosives",
+                equityCurve: [38500, 41000, 43200, 45500, 47000, 48500],
+                niftyCurve: [1000, 1030, 1080, 1110, 1130, 1150],
+                sectors: { ConsumerTech: 40, Telecom: 30, Defense: 30 },
+                disclosures: [
+                    { company: "Zomato Ltd", type: "FPI Shareholding >1%", stake: "2.4%", avgPrice: "₹175", cmp: "₹265", gain: "+51.4%" },
+                    { company: "Premier Explosives", type: "Block Deal", stake: "1.5%", avgPrice: "₹490", cmp: "₹740", gain: "+51.0%" }
+                ]
+            }
+        ];
+
+        // NSE/BSE Sector Accumulation Datasets
+        const consensusSectors = [
+            { title: "Defense & Aerospace Hardware", category: "Capital Goods", capital: "₹9,420 Cr", yesPct: 88, status: "HEAVY ACCUMULATION", whales: 24 },
+            { title: "Electronics Manufacturing (EMS)", category: "Tech & Hardware", capital: "₹7,850 Cr", yesPct: 82, status: "STRONG ACCUMULATION", whales: 19 },
+            { title: "Renewable Energy & Power Infra", category: "Utilities", capital: "₹12,400 Cr", yesPct: 75, status: "ACCUMULATING", whales: 28 },
+            { title: "IT Services & Software Exporters", category: "IT", capital: "₹6,100 Cr", yesPct: 32, status: "DISTRIBUTION / PROFIT TAKING", whales: 14 }
+        ];
+
+        // Global Chart Instances
+        let simChartInstance = null;
+        let modalEquityChartInstance = null;
+        let modalCategoryChartInstance = null;
+
+        // Window Init
+        window.onload = function () {
+            renderConsensus();
+            renderTable(superInvestorData);
+            populateCalcDropdown();
+            runCopySimulation();
+
+            document.getElementById('searchInput').addEventListener('input', function() {
+                filterWallets();
+            });
+        };
+
+        // Render Heatmap Sectors
+        function renderConsensus() {
+            const container = document.getElementById('consensusList');
+            container.innerHTML = '';
+
+            consensusSectors.forEach(s => {
+                const isBullish = s.yesPct >= 50;
+                const barColor = isBullish ? 'bg-emerald-400' : 'bg-rose-500';
+                const badgeBg = isBullish ? 'bg-emerald-950 text-emerald-400 border-emerald-500/30' : 'bg-rose-950 text-rose-400 border-rose-500/30';
+
+                const row = document.createElement('div');
+                row.className = "p-3 bg-slate-900/90 rounded-xl border border-slate-800/80 hover:border-slate-700 transition-all";
+                row.innerHTML = `
+                    <div class="flex items-center justify-between mb-1.5">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold text-slate-100">${s.title}</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">${s.category}</span>
+                        </div>
+                        <span class="text-xs font-mono font-bold px-2 py-0.5 rounded border ${badgeBg}">${s.status}</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden flex">
+                            <div class="${barColor} h-full" style="width: ${s.yesPct}%"></div>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-slate-200 w-16 text-right">${s.yesPct}% BUY</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 font-mono mt-1.5">
+                        <span>Whale Capital Deployed: <strong class="text-slate-200">${s.capital}</strong></span>
+                        <span>Tracking: <strong class="text-cyan-400">${s.whales} Super-Investors</strong></span>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Render Super-Investor Table
+        function renderTable(data) {
+            const tbody = document.getElementById('walletTableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500">No matching Super-Investors found.</td></tr>`;
+                return;
+            }
+
+            data.forEach(w => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/60 transition-colors group cursor-pointer";
+                tr.onclick = (e) => {
+                    if (!e.target.closest('button')) {
+                        openWalletModal(w.name);
+                    }
+                };
+
+                const formattedValue = w.value >= 1000 ? '₹' + (w.value / 1000).toFixed(1) + 'k Cr' : '₹' + w.value + ' Cr';
+                const typeClass = w.category === 'HNI Whale' ? 'bg-saffron-950/60 text-saffron-300 border-saffron-500/30' : 
+                                  (w.category === 'Domestic MF' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30' : 'bg-cyan-950/60 text-cyan-300 border-cyan-500/30');
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-bold text-slate-300">#${w.rank}</td>
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-white group-hover:text-cyan-400 transition-colors">${w.name}</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${typeClass}">${w.type}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-slate-100 font-bold font-mono">${formattedValue}</td>
+                    <td class="py-3.5 px-4 font-bold text-emerald-400">+${w.returns}%</td>
+                    <td class="py-3.5 px-4 text-cyan-400 font-semibold">${w.winrate}%</td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-1 rounded text-[11px] bg-slate-900 text-slate-300 border border-slate-700/80">${w.archetype}</span>
+                    </td>
+                    <td class="py-3.5 px-4 max-w-xs truncate text-slate-300 font-sans">
+                        ${w.keyHoldings}
+                    </td>
+                    <td class="py-3.5 px-4 text-right">
+                        <button onclick="openWalletModal('${w.name}')" class="px-3 py-1 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 text-slate-300 transition-all text-[11px]">
+                            Inspect Portfolio
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filter Function
+        function filterWallets() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const arch = document.getElementById('archetypeFilter').value;
+            const sort = document.getElementById('sortBy').value;
+
+            let filtered = superInvestorData.filter(w => {
+                const matchesSearch = w.name.toLowerCase().includes(search) || 
+                                      w.keyHoldings.toLowerCase().includes(search);
+                const matchesCat = cat === 'ALL' || w.category === cat;
+                const matchesArch = arch === 'ALL' || w.archetype === arch;
+                return matchesSearch && matchesCat && matchesArch;
+            });
+
+            filtered.sort((a, b) => {
+                if (sort === 'value') return b.value - a.value;
+                if (sort === 'returns') return b.returns - a.returns;
+                if (sort === 'winrate') return b.winrate - a.winrate;
+                return 0;
+            });
+
+            renderTable(filtered);
+        }
+
+        // Calculator Dropdown Populator
+        function populateCalcDropdown() {
+            const select = document.getElementById('calcWalletSelect');
+            select.innerHTML = '';
+            superInvestorData.forEach(w => {
+                const opt = document.createElement('option');
+                opt.value = w.name;
+                opt.innerText = `${w.name} (${w.archetype} - 1Y: +${w.returns}%)`;
+                select.appendChild(opt);
+            });
+        }
+
+        // Run Copy Simulation
+        function runCopySimulation() {
+            const selectedName = document.getElementById('calcWalletSelect').value || superInvestorData[0].name;
+            const capital = parseFloat(document.getElementById('capitalInput').value) || 500000;
+            const stopLoss = parseFloat(document.getElementById('stopLossInput').value) || 12;
+            const slippage = parseFloat(document.getElementById('slippageInput').value) || 1.0;
+            const copyPct = parseFloat(document.getElementById('copyPctRange').value) || 50;
+
+            const investor = superInvestorData.find(w => w.name === selectedName) || superInvestorData[0];
+
+            const allocatedCapital = capital * (copyPct / 100);
+            const rawRoi = investor.returns / 100;
+            const slippageDrag = (slippage / 100);
+            const netRoi = Math.max(-stopLoss / 100, rawRoi - slippageDrag);
+
+            const projNetCorpus = capital + (allocatedCapital * netRoi);
+            const niftyRoi = 0.15; // Nifty 15% baseline
+            const niftyCorpus = capital * (1 + niftyRoi);
+
+            const alphaOverIndex = ((netRoi * (copyPct/100) - niftyRoi) * 100).toFixed(1);
+
+            document.getElementById('calcProjReturn').innerText = '₹' + Math.round(projNetCorpus).toLocaleString('en-IN');
+            document.getElementById('calcProjRoi').innerText = `(${netRoi >= 0 ? '+' : ''}${(netRoi * 100).toFixed(1)}% Return on Allocation)`;
+            document.getElementById('calcNiftyCorpus').innerText = '₹' + Math.round(niftyCorpus).toLocaleString('en-IN');
+            
+            const alphaElem = document.getElementById('calcAlphaOverIndex');
+            alphaElem.innerText = (alphaOverIndex >= 0 ? '+' : '') + alphaOverIndex + '%';
+            alphaElem.className = alphaOverIndex >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+
+            renderSimChart(capital, allocatedCapital, netRoi, niftyRoi);
+        }
+
+        // Simulation Canvas Chart
+        function renderSimChart(capital, allocated, netRoi, niftyRoi) {
+            const ctx = document.getElementById('simChart').getContext('2d');
+
+            if (simChartInstance) {
+                simChartInstance.destroy();
+            }
+
+            const steps = 6;
+            const copyPoints = [];
+            const niftyPoints = [];
+
+            for (let i = 0; i <= steps; i++) {
+                const prog = i / steps;
+                copyPoints.push(capital + (allocated * netRoi * prog) + (Math.sin(i * 1.5) * capital * 0.01));
+                niftyPoints.push(capital * (1 + niftyRoi * prog));
+            }
+
+            simChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1 FY25', 'Q2 FY25', 'Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'NOW'],
+                    datasets: [
+                        {
+                            label: 'Super-Investor Copy Basket (₹)',
+                            data: copyPoints,
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 3
+                        },
+                        {
+                            label: 'Nifty 50 Index Baseline (₹)',
+                            data: niftyPoints,
+                            borderColor: '#94a3b8',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.2,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { family: 'JetBrains Mono', size: 10 } } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        // Open Wallet Modal
+        function openWalletModal(investorName) {
+            const w = superInvestorData.find(x => x.name === investorName);
+            if (!w) return;
+
+            document.getElementById('modalWalletName').innerText = w.name;
+            document.getElementById('modalCategory').innerText = `SEBI Category: ${w.type}`;
+            document.getElementById('modalArchetypeTag').innerText = w.archetype;
+            document.getElementById('modalPnL').innerText = w.value >= 1000 ? '₹' + (w.value / 1000).toFixed(1) + 'k Cr' : '₹' + w.value + ' Cr';
+            document.getElementById('modalVol').innerText = '+' + w.returns + '%';
+            document.getElementById('modalWinRate').innerText = w.winrate + '%';
+            document.getElementById('modalSharpe').innerText = Object.keys(w.sectors)[0] || 'Equities';
+
+            const posTbody = document.getElementById('modalPositionsTable');
+            posTbody.innerHTML = '';
+            w.disclosures.forEach(d => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${d.company}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-500/30">${d.type}</span></td>
+                    <td class="p-3 text-slate-300 font-bold">${d.stake}</td>
+                    <td class="p-3 text-slate-400">${d.avgPrice}</td>
+                    <td class="p-3 text-cyan-400 font-bold">${d.cmp}</td>
+                    <td class="p-3 text-emerald-400 font-bold">${d.gain}</td>
+                `;
+                posTbody.appendChild(tr);
+            });
+
+            document.getElementById('walletModal').classList.remove('hidden');
+
+            setTimeout(() => {
+                renderModalEquityChart(w.equityCurve, w.niftyCurve);
+                renderModalCategoryChart(w.sectors);
+            }, 100);
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.add('hidden');
+        }
+
+        function renderModalEquityChart(portfolioCurve, indexCurve) {
+            const ctx = document.getElementById('modalEquityChart').getContext('2d');
+            if (modalEquityChartInstance) {
+                modalEquityChartInstance.destroy();
+            }
+
+            modalEquityChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1 FY25', 'Q2 FY25', 'Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'NOW'],
+                    datasets: [
+                        {
+                            label: 'Super-Investor Portfolio (₹ Cr)',
+                            data: portfolioCurve,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                            fill: true,
+                            tension: 0.25,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#10b981'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function renderModalCategoryChart(sectorData) {
+            const ctx = document.getElementById('modalCategoryChart').getContext('2d');
+            if (modalCategoryChartInstance) {
+                modalCategoryChartInstance.destroy();
+            }
+
+            modalCategoryChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sectorData),
+                    datasets: [{
+                        data: Object.values(sectorData),
+                        backgroundColor: ['#f97316', '#06b6d4', '#10b981', '#a855f7', '#eab308'],
+                        borderWidth: 2,
+                        borderColor: '#0c1222'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#cbd5e1', font: { family: 'JetBrains Mono', size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function triggerCopyAction() {
+            const targetInvestor = document.getElementById('calcWalletSelect').value;
+            showToast(`NSE/BSE Alert Basket set for ${targetInvestor}! Exchange webhook ready.`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
